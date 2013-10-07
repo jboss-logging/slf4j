@@ -70,9 +70,13 @@ public final class LoggerFactory {
   static final int SUCCESSFUL_INITIALIZATION = 3;
   static final int NOP_FALLBACK_INITIALIZATION = 4;
 
-  static int INITIALIZATION_STATE = UNINITIALIZED;
-  static SubstituteLoggerFactory TEMP_FACTORY = new SubstituteLoggerFactory();
-  static NOPLoggerFactory NOP_FALLBACK_FACTORY = new NOPLoggerFactory();
+  static volatile int INITIALIZATION_STATE = UNINITIALIZED;
+  static volatile SubstituteLoggerFactory TEMP_FACTORY = new SubstituteLoggerFactory();
+  static volatile NOPLoggerFactory NOP_FALLBACK_FACTORY = new NOPLoggerFactory();
+  /**
+   * Used as a lock for read/writing state of {@link #INITIALIZATION_STATE}.
+   */
+  static final Object STATE_LOCK = new Object();
 
   /**
    * It is LoggerFactory's responsibility to track version changes and manage
@@ -99,7 +103,9 @@ public final class LoggerFactory {
    * You are strongly discouraged from calling this method in production code.
    */
   static void reset() {
-    INITIALIZATION_STATE = UNINITIALIZED;
+    synchronized (STATE_LOCK) {
+      INITIALIZATION_STATE = UNINITIALIZED;
+    }
     TEMP_FACTORY = new SubstituteLoggerFactory();
   }
 
@@ -157,7 +163,9 @@ public final class LoggerFactory {
   }
 
   static void failedBinding(Throwable t) {
-    INITIALIZATION_STATE = FAILED_INITIALIZATION;
+    synchronized (STATE_LOCK) {
+      INITIALIZATION_STATE = FAILED_INITIALIZATION;
+    }
     Util.report("Failed to instantiate SLF4J LoggerFactory", t);
   }
 
@@ -290,11 +298,19 @@ public final class LoggerFactory {
    * @return the ILoggerFactory instance in use
    */
   public static ILoggerFactory getILoggerFactory() {
-    if (INITIALIZATION_STATE == UNINITIALIZED) {
-      INITIALIZATION_STATE = ONGOING_INITIALIZATION;
-      performInitialization();
+    // If re-entrant, return the temp factory
+    if (Thread.holdsLock(STATE_LOCK) && INITIALIZATION_STATE == ONGOING_INITIALIZATION) {
+      return TEMP_FACTORY;
     }
-    switch (INITIALIZATION_STATE) {
+    final int currentState;
+    synchronized (STATE_LOCK) {
+      if (INITIALIZATION_STATE == UNINITIALIZED) {
+        INITIALIZATION_STATE = ONGOING_INITIALIZATION;
+        performInitialization();
+      }
+      currentState = INITIALIZATION_STATE;
+    }
+    switch (currentState) {
       case SUCCESSFUL_INITIALIZATION:
         return StaticLoggerBinder.getSingleton().getLoggerFactory();
       case NOP_FALLBACK_INITIALIZATION:
