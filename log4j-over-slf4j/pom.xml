@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-parent</artifactId>
-    <version>1.7.2</version>
+    <version>1.7.2.jbossorg-1</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -29,13 +29,13 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-    </dependency>  
+    </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
       <scope>test</scope>
-    </dependency>  
+    </dependency>
   </dependencies>
 
 
@@ -53,7 +53,7 @@
             </manifestEntries>
             <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
           </archive>
-        </configuration>			
+        </configuration>
       </plugin>
     </plugins>
   </build>

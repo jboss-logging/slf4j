@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-parent</artifactId>
-    <version>1.7.2</version>
+    <version>1.7.2.jbossorg-1</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -28,11 +28,11 @@
       <artifactId>slf4j-log4j12</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
-    </dependency>		
+    </dependency>
     <dependency>
       <groupId>ch.qos.cal10n</groupId>
       <artifactId>cal10n-api</artifactId>
-    </dependency>		
+    </dependency>
     <dependency>
       <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
@@ -90,15 +90,15 @@
             </manifestEntries>
             <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
           </archive>
-        </configuration>			
-      </plugin>      
+        </configuration>
+      </plugin>
     </plugins>
 
   </build>
 
   <reporting>
     <plugins>
-    
+
     </plugins>
   </reporting>
 
