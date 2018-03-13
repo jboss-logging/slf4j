@@ -25,13 +25,11 @@
 package org.slf4j.ext;
 
 import java.io.Serializable;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.beans.ExceptionListener;
 
@@ -76,13 +74,7 @@ public class EventData implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public EventData(String xml) {
-        ByteArrayInputStream bais = new ByteArrayInputStream(xml.getBytes());
-        try {
-            XMLDecoder decoder = new XMLDecoder(bais);
-            this.eventData = (Map<String, Object>) decoder.readObject();
-        } catch (Exception e) {
-            throw new EventException("Error decoding " + xml, e);
-        }
+        throw new SecurityException();
     }
 
     /**
