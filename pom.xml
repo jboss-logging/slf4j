@@ -28,8 +28,8 @@
   </licenses>
 
   <scm>
-    <url>https://github.com/qos-ch/slf4j</url>
-    <connection>git@github.com:qos-ch/slf4j.git</connection>
+    <url>https://github.com/jboss-logging/slf4j</url>
+    <connection>git@github.com:jboss-logging/slf4j.git</connection>
   </scm>  
 
   <properties>
@@ -407,16 +407,20 @@
   </pluginRepositories>
 
   <distributionManagement>
-    <site>
+    <!-- <site>
       <id>qos_ch</id>
       <url>scp://te.qos.ch/var/www/www.slf4j.org/htdocs/</url>
-    </site>
+    </site> -->
 
     <repository>
       <!--<id>pixie</id>-->
       <!--<url>scp://pixie.qos.ch/var/mvnrepo/</url>-->
-      <id>sonatype-nexus-staging</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <!-- <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> -->
+      <id>jboss-public-repository-group</id>
+      <name>JBoss Public Repository Group</name>
+      <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</url>
+      <layout>default</layout>
     </repository>
 
   </distributionManagement>
